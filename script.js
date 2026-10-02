@@ -1,159 +1,528 @@
-const intro = document.getElementById("intro");
-const envelope = document.getElementById("envelope");
-const openSeal = document.getElementById("openSeal");
-const openLabel = document.getElementById("openLabel");
-const invitation = document.getElementById("invitation");
-const petals = document.getElementById("petals");
+/* =========================================================
+   DEVIKA & SACHIN — WEDDING INVITATION
+   SCRIPT MATCHED TO CURRENT index.html
+   ========================================================= */
 
-const musicButton = document.getElementById("musicButton");
-const musicText = document.getElementById("musicText");
-const weddingMusic = document.getElementById("weddingMusic");
+document.addEventListener("DOMContentLoaded", function () {
 
-let opened = false;
-let musicAvailable = true;
+    const intro = document.getElementById("intro");
+    const openSeal = document.getElementById("openSeal");
+    const openLabel = document.getElementById("openLabel");
 
-function createPetals() {
-  if (!petals) return;
+    const invitation = document.getElementById("invitation");
 
-  const colors = ["#b65a65", "#c47a82", "#8b9770", "#a8ad89", "#d6b56c"];
-  const count = window.innerWidth < 600 ? 22 : 34;
+    const petalsContainer = document.getElementById("petals");
 
-  for (let i = 0; i < count; i++) {
-    const petal = document.createElement("span");
-    petal.className = "petal";
+    const musicButton = document.getElementById("musicButton");
+    const musicText = document.getElementById("musicText");
+    const youtubePlayer = document.getElementById("youtubePlayer");
 
-    const size = 5 + Math.random() * 8;
-    const x = Math.random() * 100;
-    const duration = 9 + Math.random() * 10;
-    const delay = -Math.random() * duration;
-    const drift1 = `${-45 + Math.random() * 90}px`;
-    const drift2 = `${-70 + Math.random() * 140}px`;
-    const rotation = Math.random() * 360;
-    const opacity = .3 + Math.random() * .45;
+    let youtubeReady = false;
+    let musicPlaying = false;
 
-    petal.style.setProperty("--size", `${size}px`);
-    petal.style.setProperty("--x", `${x}%`);
-    petal.style.setProperty("--duration", `${duration}s`);
-    petal.style.setProperty("--delay", `${delay}s`);
-    petal.style.setProperty("--drift1", drift1);
-    petal.style.setProperty("--drift2", drift2);
-    petal.style.setProperty("--start-rotation", `${rotation}deg`);
-    petal.style.setProperty("--opacity", opacity);
-    petal.style.setProperty(
-      "--petal-color",
-      colors[Math.floor(Math.random() * colors.length)]
-    );
 
-    petals.appendChild(petal);
-  }
-}
+    /* =====================================================
+       OPEN INVITATION
+       ===================================================== */
 
-function revealSections() {
-  const elements = document.querySelectorAll(".reveal");
+    function openInvitation() {
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
+        if (!intro) return;
+
+        // Start opening animation
+        intro.classList.add("opened");
+
+        // Make invitation accessible
+        if (invitation) {
+            invitation.setAttribute("aria-hidden", "false");
         }
-      });
-    },
-    { threshold: 0.14 }
-  );
 
-  elements.forEach((element) => observer.observe(element));
-}
+        // Create falling petals
+        createPetals();
 
-function openInvitation() {
-  if (opened) return;
-  opened = true;
+        // Start music after the user's tap
+        startMusic();
 
-  envelope.classList.add("opening");
+        // Trigger reveal animation
+        setTimeout(function () {
+            revealVisibleSections();
+        }, 500);
+    }
 
-  setTimeout(() => {
-    invitation.setAttribute("aria-hidden", "false");
-    intro.classList.add("opened");
-    document.body.classList.add("invitation-open");
-    createPetals();
-    revealSections();
 
-    // Browsers allow audio after the user has interacted with the page.
-    playMusic();
-  }, 850);
-}
+    if (openSeal) {
+        openSeal.addEventListener("click", openInvitation);
+    }
 
-async function playMusic() {
-  if (!weddingMusic) return;
+    if (openLabel) {
+        openLabel.addEventListener("click", openInvitation);
+    }
 
-  try {
-    await weddingMusic.play();
-    musicButton.classList.remove("paused");
-    musicText.textContent = "music on";
-  } catch (error) {
-    // music.mp3 may not exist yet, or the browser may block it.
-    musicAvailable = false;
-    musicButton.classList.add("paused");
-    musicText.textContent = "music";
-  }
-}
 
-function toggleMusic() {
-  if (!musicAvailable) {
-    musicText.textContent = "add music.mp3";
-    setTimeout(() => {
-      musicText.textContent = "music";
-    }, 1800);
-    return;
-  }
+    /* =====================================================
+       YOUTUBE MUSIC
+       ===================================================== */
 
-  if (weddingMusic.paused) {
-    playMusic();
-  } else {
-    weddingMusic.pause();
-    musicButton.classList.add("paused");
-    musicText.textContent = "music off";
-  }
-}
+    /*
+       The iframe contains the official Pesamale YouTube video.
 
-openSeal.addEventListener("click", openInvitation);
-openLabel.addEventListener("click", openInvitation);
-musicButton.addEventListener("click", toggleMusic);
+       We use the YouTube IFrame API to control it.
+    */
 
-// Countdown to the muhurtham: 23 Dec 2026, 11:28 AM.
-// The timezone is the visitor's local timezone so the countdown remains
-// consistent for guests viewing the invitation from different locations.
-const weddingDate = new Date("2026-12-23T11:28:00");
+    function loadYouTubeAPI() {
 
-function updateCountdown() {
-  const now = new Date();
-  const difference = weddingDate.getTime() - now.getTime();
+        if (window.YT && window.YT.Player) {
+            createYouTubePlayer();
+            return;
+        }
 
-  const values = {
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  };
+        const tag = document.createElement("script");
 
-  if (difference > 0) {
-    values.days = Math.floor(difference / (1000 * 60 * 60 * 24));
-    values.hours = Math.floor(
-      (difference / (1000 * 60 * 60)) % 24
+        tag.src = "https://www.youtube.com/iframe_api";
+
+        document.head.appendChild(tag);
+    }
+
+
+    window.onYouTubeIframeAPIReady = function () {
+        createYouTubePlayer();
+    };
+
+
+    function createYouTubePlayer() {
+
+        if (!youtubePlayer) return;
+
+        if (youtubeReady) return;
+
+        try {
+
+            window.pesamalePlayer = new YT.Player(
+                "youtubePlayer",
+                {
+                    events: {
+                        onReady: function () {
+                            youtubeReady = true;
+                        }
+                    }
+                }
+            );
+
+        } catch (error) {
+            console.log("YouTube player could not be created.");
+        }
+    }
+
+
+    function startMusic() {
+
+        if (!youtubeReady || !window.pesamalePlayer) {
+
+            // The API may not have loaded yet.
+            // Try again shortly.
+            setTimeout(function () {
+                if (youtubeReady && window.pesamalePlayer) {
+                    startMusic();
+                }
+            }, 1000);
+
+            return;
+        }
+
+        try {
+
+            window.pesamalePlayer.playVideo();
+
+            musicPlaying = true;
+
+            updateMusicButton();
+
+        } catch (error) {
+
+            console.log("Music could not be started.");
+
+        }
+    }
+
+
+    function stopMusic() {
+
+        if (
+            !youtubeReady ||
+            !window.pesamalePlayer
+        ) {
+            return;
+        }
+
+        try {
+
+            window.pesamalePlayer.pauseVideo();
+
+            musicPlaying = false;
+
+            updateMusicButton();
+
+        } catch (error) {
+
+            console.log("Music could not be paused.");
+
+        }
+    }
+
+
+    function updateMusicButton() {
+
+        if (!musicButton || !musicText) return;
+
+        if (musicPlaying) {
+
+            musicText.textContent = "music on";
+
+            musicButton.classList.add("playing");
+
+            musicButton.setAttribute(
+                "aria-label",
+                "Pause music"
+            );
+
+        } else {
+
+            musicText.textContent = "play music";
+
+            musicButton.classList.remove("playing");
+
+            musicButton.setAttribute(
+                "aria-label",
+                "Play music"
+            );
+        }
+    }
+
+
+    if (musicButton) {
+
+        musicButton.addEventListener("click", function () {
+
+            if (musicPlaying) {
+
+                stopMusic();
+
+            } else {
+
+                startMusic();
+
+            }
+
+        });
+
+    }
+
+
+    // Load YouTube API immediately
+    loadYouTubeAPI();
+
+
+    /* =====================================================
+       FALLING PETALS
+       ===================================================== */
+
+    function createPetals() {
+
+        if (!petalsContainer) return;
+
+        // Prevent duplicate petals
+        if (
+            petalsContainer.dataset.created === "true"
+        ) {
+            return;
+        }
+
+        petalsContainer.dataset.created = "true";
+
+        const numberOfPetals = 30;
+
+        for (let i = 0; i < numberOfPetals; i++) {
+
+            const petal =
+                document.createElement("span");
+
+            petal.classList.add("petal");
+
+            // Random starting position
+            petal.style.left =
+                Math.random() * 100 + "%";
+
+            // Random delay
+            petal.style.animationDelay =
+                Math.random() * 9 + "s";
+
+            // Random falling speed
+            petal.style.animationDuration =
+                7 + Math.random() * 7 + "s";
+
+            // Random size
+            const size =
+                5 + Math.random() * 5;
+
+            petal.style.width =
+                size + "px";
+
+            petal.style.height =
+                size * 1.5 + "px";
+
+            // Random starting rotation
+            petal.style.transform =
+                "rotate(" +
+                Math.random() * 360 +
+                "deg)";
+
+            petalsContainer.appendChild(petal);
+        }
+    }
+
+
+    /* =====================================================
+       COUNTDOWN
+       ===================================================== */
+
+    /*
+       Wedding:
+       23 December 2026
+       Muhurtham:
+       11:28 AM
+       India Standard Time (+05:30)
+    */
+
+    const weddingDate =
+        new Date(
+            "2026-12-23T11:28:00+05:30"
+        ).getTime();
+
+
+    function updateCountdown() {
+
+        const now =
+            new Date().getTime();
+
+        const difference =
+            weddingDate - now;
+
+        const days =
+            document.getElementById("days");
+
+        const hours =
+            document.getElementById("hours");
+
+        const minutes =
+            document.getElementById("minutes");
+
+        const seconds =
+            document.getElementById("seconds");
+
+
+        if (
+            !days ||
+            !hours ||
+            !minutes ||
+            !seconds
+        ) {
+            return;
+        }
+
+
+        // Wedding time has arrived
+        if (difference <= 0) {
+
+            days.textContent = "00";
+            hours.textContent = "00";
+            minutes.textContent = "00";
+            seconds.textContent = "00";
+
+            return;
+        }
+
+
+        const dayValue =
+            Math.floor(
+                difference /
+                (1000 * 60 * 60 * 24)
+            );
+
+
+        const hourValue =
+            Math.floor(
+                (difference /
+                    (1000 * 60 * 60)) % 24
+            );
+
+
+        const minuteValue =
+            Math.floor(
+                (difference /
+                    (1000 * 60)) % 60
+            );
+
+
+        const secondValue =
+            Math.floor(
+                (difference / 1000) % 60
+            );
+
+
+        days.textContent =
+            String(dayValue).padStart(2, "0");
+
+        hours.textContent =
+            String(hourValue).padStart(2, "0");
+
+        minutes.textContent =
+            String(minuteValue).padStart(2, "0");
+
+        seconds.textContent =
+            String(secondValue).padStart(2, "0");
+    }
+
+
+    updateCountdown();
+
+    setInterval(
+        updateCountdown,
+        1000
     );
-    values.minutes = Math.floor(
-      (difference / (1000 * 60)) % 60
-    );
-    values.seconds = Math.floor(
-      (difference / 1000) % 60
-    );
-  }
 
-  document.getElementById("days").textContent = String(values.days).padStart(2, "0");
-  document.getElementById("hours").textContent = String(values.hours).padStart(2, "0");
-  document.getElementById("minutes").textContent = String(values.minutes).padStart(2, "0");
-  document.getElementById("seconds").textContent = String(values.seconds).padStart(2, "0");
-}
 
-updateCountdown();
-setInterval(updateCountdown, 1000);
+    /* =====================================================
+       SCROLL REVEAL
+       ===================================================== */
+
+    const revealElements =
+        document.querySelectorAll(".reveal");
+
+
+    function revealVisibleSections() {
+
+        revealElements.forEach(function (element) {
+
+            const rect =
+                element.getBoundingClientRect();
+
+            const visible =
+                rect.top <
+                window.innerHeight * 0.9;
+
+            if (visible) {
+                element.classList.add("visible");
+            }
+
+        });
+    }
+
+
+    if ("IntersectionObserver" in window) {
+
+        const observer =
+            new IntersectionObserver(
+                function (entries) {
+
+                    entries.forEach(
+                        function (entry) {
+
+                            if (
+                                entry.isIntersecting
+                            ) {
+
+                                entry.target.classList.add(
+                                    "visible"
+                                );
+
+                                observer.unobserve(
+                                    entry.target
+                                );
+
+                            }
+
+                        }
+                    );
+
+                },
+                {
+                    threshold: 0.12
+                }
+            );
+
+
+        revealElements.forEach(
+            function (element) {
+                observer.observe(element);
+            }
+        );
+
+    } else {
+
+        revealElements.forEach(
+            function (element) {
+                element.classList.add("visible");
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       SMOOTH SCROLL
+       ===================================================== */
+
+    document
+        .querySelectorAll('a[href^="#"]')
+        .forEach(function (link) {
+
+            link.addEventListener(
+                "click",
+                function (event) {
+
+                    const targetId =
+                        link.getAttribute("href");
+
+                    if (
+                        !targetId ||
+                        targetId === "#"
+                    ) {
+                        return;
+                    }
+
+                    const target =
+                        document.querySelector(
+                            targetId
+                        );
+
+                    if (!target) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                }
+            );
+
+        });
+
+
+    /* =====================================================
+       INITIAL STATE
+       ===================================================== */
+
+    if (invitation) {
+        invitation.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+    }
+
+    updateMusicButton();
+
+});
