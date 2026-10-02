@@ -1,120 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f7f2e9">
-  <meta name="description" content="The wedding invitation of Devika & Sachin">
-  <title>Devika & Sachin — Wedding Invitation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f1e8" />
+  <title>Devika & Sachin | Wedding Invitation</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Italianno&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="opening" id="opening">
-    <div class="opening-card">
-      <p class="eyebrow">A little note, just for you</p>
-      <div class="ornament">❦</div>
-      <h1>Devika <span>&</span> Sachin</h1>
-      <p class="opening-date">23 · 12 · 2026</p>
-      <button class="open-btn" id="openInvitation">Open the Invitation</button>
+  <!-- OPENING SCREEN -->
+  <section class="intro" id="intro" aria-label="Open wedding invitation">
+    <div class="intro-glow"></div>
+
+    <div class="intro-content">
+      <p class="eyebrow">a little note · just for you</p>
+
+      <h1 class="intro-names">
+        <span>Devika</span>
+        <i>&amp;</i>
+        <span>Sachin</span>
+      </h1>
+
+      <p class="intro-date">23 · 12 · 2026</p>
+
+      <div class="envelope" id="envelope">
+        <div class="envelope-back"></div>
+
+        <div class="letter">
+          <div class="letter-border"></div>
+          <p class="letter-small">YOU ARE INVITED</p>
+          <p class="letter-script">to our wedding</p>
+          <div class="letter-line"></div>
+        </div>
+
+        <button class="seal" id="openSeal" type="button" aria-label="Open the invitation">
+          <span class="seal-ring"></span>
+          <span class="seal-monogram">D<span>&amp;</span>S</span>
+        </button>
+
+        <div class="envelope-front"></div>
+        <div class="envelope-flap"></div>
+      </div>
+
+      <button class="open-label" id="openLabel" type="button">
+        <span>tap the seal</span>
+        <strong>Open the invitation</strong>
+      </button>
+
+      <p class="intro-hint">with love, from our families</p>
     </div>
-  </div>
+  </section>
 
-  <main id="invitation" class="hidden">
-    <section class="hero">
-      <div class="hero-overlay"></div>
-      <img src="images/photo-7.jpeg" alt="Devika and Sachin" class="hero-image">
-      <div class="hero-content">
-        <p class="eyebrow light">Together with their families</p>
-        <h1>Devika <span>&</span> Sachin</h1>
-        <p class="hero-subtitle">are getting married</p>
-        <div class="gold-line"></div>
-        <p class="hero-date">23 December 2026</p>
+  <!-- MAIN INVITATION -->
+  <main class="invitation" id="invitation" aria-hidden="true">
+    <div class="paper-texture"></div>
+    <div class="petals" id="petals" aria-hidden="true"></div>
+
+    <button class="music-button" id="musicButton" type="button" aria-label="Play music">
+      <span class="music-bars"><i></i><i></i><i></i><i></i></span>
+      <span id="musicText">music</span>
+    </button>
+
+    <audio id="weddingMusic" loop preload="none">
+      <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <section class="hero section reveal">
+      <div class="ornament top-ornament">✦</div>
+      <p class="eyebrow">together with our families</p>
+
+      <h2 class="names">
+        <span>Devika</span>
+        <small>&amp;</small>
+        <span>Sachin</span>
+      </h2>
+
+      <p class="getting-married">are getting married</p>
+
+      <div class="hero-illustration" aria-label="Illustration of a wedding couple">
+        <svg viewBox="0 0 500 440" role="img" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="5" stdDeviation="7" flood-opacity=".12"/>
+            </filter>
+          </defs>
+
+          <!-- foliage -->
+          <g fill="none" stroke="#6f7950" stroke-width="3" stroke-linecap="round">
+            <path d="M56 382 C70 320 92 278 132 238"/>
+            <path d="M444 382 C430 320 408 278 368 238"/>
+            <path d="M90 352 C68 330 55 305 51 280"/>
+            <path d="M410 352 C432 330 445 305 449 280"/>
+          </g>
+          <g fill="#7f8b5d">
+            <ellipse cx="70" cy="321" rx="10" ry="23" transform="rotate(-42 70 321)"/>
+            <ellipse cx="85" cy="291" rx="9" ry="22" transform="rotate(34 85 291)"/>
+            <ellipse cx="102" cy="268" rx="9" ry="21" transform="rotate(-35 102 268)"/>
+            <ellipse cx="430" cy="321" rx="10" ry="23" transform="rotate(42 430 321)"/>
+            <ellipse cx="415" cy="291" rx="9" ry="22" transform="rotate(-34 415 291)"/>
+            <ellipse cx="398" cy="268" rx="9" ry="21" transform="rotate(35 398 268)"/>
+          </g>
+
+          <!-- woman -->
+          <g filter="url(#softShadow)">
+            <path d="M130 397 C142 330 157 292 188 273 C214 257 250 257 272 280 C295 304 305 347 315 397 Z" fill="#8f3141"/>
+            <path d="M144 397 C158 345 174 308 199 291 C224 274 251 276 275 298 C291 315 300 348 306 397 Z" fill="#b65a65"/>
+            <path d="M183 275 C184 245 192 224 213 215 C238 204 261 219 267 248 L260 278 C241 291 211 292 190 278 Z" fill="#d99a78"/>
+            <path d="M184 247 C186 216 207 193 237 197 C263 200 278 221 273 252 C263 234 249 224 229 224 C211 224 198 235 184 247 Z" fill="#2c211d"/>
+            <circle cx="211" cy="252" r="3.5" fill="#38231f"/>
+            <circle cx="250" cy="252" r="3.5" fill="#38231f"/>
+            <path d="M220 267 Q232 275 243 267" fill="none" stroke="#8f4f47" stroke-width="3" stroke-linecap="round"/>
+            <path d="M198 293 Q225 309 255 292" fill="none" stroke="#e8bd9e" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="205" cy="273" r="4" fill="#b65a65"/>
+            <circle cx="257" cy="273" r="4" fill="#b65a65"/>
+            <!-- hair -->
+            <path d="M184 242 Q176 211 201 193 Q235 171 267 196 Q284 211 274 248 Q267 223 247 214 Q218 202 184 242Z" fill="#34231f"/>
+            <!-- saree border -->
+            <path d="M145 391 Q205 362 307 391" fill="none" stroke="#d6b56c" stroke-width="7"/>
+            <!-- jasmine -->
+            <path d="M202 211 Q232 190 264 212" fill="none" stroke="#f4ead8" stroke-width="6" stroke-linecap="round"/>
+          </g>
+
+          <!-- man -->
+          <g filter="url(#softShadow)">
+            <path d="M252 398 C261 333 274 288 303 273 C326 261 358 265 378 283 C400 303 410 346 416 398 Z" fill="#345246"/>
+            <path d="M270 399 C277 345 290 310 310 295 C330 280 354 282 375 298 C389 311 399 349 404 399 Z" fill="#496a5c"/>
+            <path d="M301 275 C300 247 308 223 329 214 C352 204 376 218 382 246 L374 278 C353 291 323 291 306 278 Z" fill="#9b674f"/>
+            <path d="M302 243 C305 214 323 196 350 198 C375 199 388 218 384 245 C374 225 362 219 346 219 C328 219 314 228 302 243Z" fill="#2a2522"/>
+            <circle cx="325" cy="250" r="3.5" fill="#30231f"/>
+            <circle cx="362" cy="250" r="3.5" fill="#30231f"/>
+            <path d="M334 268 Q344 274 354 267" fill="none" stroke="#74473d" stroke-width="3" stroke-linecap="round"/>
+            <path d="M317 293 Q343 306 371 292" fill="none" stroke="#ead7ba" stroke-width="4" stroke-linecap="round"/>
+            <!-- kurta detail -->
+            <path d="M334 294 L334 397" stroke="#d6b56c" stroke-width="3"/>
+            <path d="M289 337 Q343 355 397 337" fill="none" stroke="#d6b56c" stroke-width="5"/>
+          </g>
+
+          <!-- joined hands -->
+          <path d="M273 323 Q291 313 307 325 Q319 334 307 344 Q292 352 274 341" fill="#d99a78"/>
+          <path d="M308 324 Q322 312 339 321 Q350 328 340 340 Q324 348 308 341" fill="#9b674f"/>
+
+          <!-- tiny hearts -->
+          <g fill="#b65a65" opacity=".8">
+            <path d="M244 144 C238 136 224 143 229 153 L244 168 L259 153 C264 143 250 136 244 144Z"/>
+            <path d="M292 115 C288 110 279 115 282 121 L292 131 L302 121 C305 115 296 110 292 115Z"/>
+          </g>
+        </svg>
+      </div>
+
+      <p class="hero-copy">Come celebrate, laugh, eat<br>and make memories with us.</p>
+
+      <div class="date-pill">
+        <span>WEDNESDAY</span>
+        <strong>23 DECEMBER 2026</strong>
+      </div>
+
+      <div class="scroll-cue">scroll <span>↓</span></div>
+    </section>
+
+    <section class="section countdown-section reveal">
+      <p class="eyebrow">the wait</p>
+      <h2>Counting down<br><em>to the muhurtham</em></h2>
+
+      <div class="countdown" id="countdown">
+        <div><strong id="days">00</strong><span>days</span></div>
+        <div><strong id="hours">00</strong><span>hours</span></div>
+        <div><strong id="minutes">00</strong><span>minutes</span></div>
+        <div><strong id="seconds">00</strong><span>seconds</span></div>
+      </div>
+
+      <div class="calendar-card">
+        <div class="calendar-head">
+          <span>DECEMBER</span>
+          <strong>2026</strong>
+        </div>
+        <div class="calendar-grid">
+          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+          <i></i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i>
+          <i>7</i><i>8</i><i>9</i><i>10</i><i>11</i><i>12</i><i>13</i>
+          <i>14</i><i>15</i><i>16</i><i>17</i><i>18</i><i>19</i><i>20</i>
+          <i>21</i><i>22</i><b>23</b><i>24</i><i>25</i><i>26</i><i>27</i>
+          <i>28</i><i>29</i><i>30</i><i>31</i>
+        </div>
       </div>
     </section>
 
-    <section class="intro section">
-      <p class="eyebrow">With love and joy</p>
-      <h2>Two hearts,<br><em>one beautiful beginning.</em></h2>
-      <p class="body-copy">
-        We would be delighted to have you with us as we begin this new chapter
-        of our lives. Your presence and blessings mean the world to us.
-      </p>
-    </section>
+    <section class="section details-section reveal">
+      <p class="eyebrow">when &amp; where</p>
+      <h2>Two people.<br><em>One beautiful day.</em></h2>
 
-    <section class="photo-feature">
-      <img src="images/photo-2.jpeg" alt="Devika and Sachin">
-    </section>
-
-    <section class="details section">
-      <p class="eyebrow">The Wedding</p>
-      <h2>Save the Date</h2>
-      <div class="date-number">23</div>
-      <p class="month">DECEMBER · 2026</p>
-      <p class="weekday">WEDNESDAY</p>
-      <div class="gold-line"></div>
-      <p class="muhurtham">Muhurtam<br><strong>11:28 AM — 12:05 PM</strong></p>
-    </section>
-
-    <section class="countdown section">
-      <p class="eyebrow">Counting down</p>
-      <h2>Until we say <em>I do</em></h2>
-      <div class="countdown-grid">
-        <div><strong id="days">--</strong><span>Days</span></div>
-        <div><strong id="hours">--</strong><span>Hours</span></div>
-        <div><strong id="minutes">--</strong><span>Minutes</span></div>
-        <div><strong id="seconds">--</strong><span>Seconds</span></div>
-      </div>
-    </section>
-
-    <section class="photo-grid">
-      <img src="images/photo-3.jpeg" alt="Devika and Sachin">
-      <img src="images/photo-4.jpeg" alt="Devika and Sachin">
-      <img src="images/photo-5.jpeg" alt="Devika and Sachin">
-      <img src="images/photo-6.jpeg" alt="Devika and Sachin">
-    </section>
-
-    <section class="venue section">
-      <p class="eyebrow">When & Where</p>
-      <h2>Join us for<br><em>our wedding day.</em></h2>
-
-      <div class="venue-card">
-        <div class="venue-icon">✦</div>
-        <h3>Wedding Ceremony</h3>
-        <p>Wednesday, 23 December 2026</p>
-        <p>11:28 AM — 12:05 PM</p>
-        <div class="small-line"></div>
-        <h4>Hajimus Convention Centre</h4>
+      <div class="detail-card">
+        <div class="detail-icon">✦</div>
+        <p class="detail-label">Muhurtham</p>
+        <h3>11:28 AM – 12:05 PM</h3>
+        <div class="rule"></div>
+        <p class="detail-label">Venue</p>
+        <h3>Hajimus Convention Centre</h3>
         <p>Taliparamba, Kannur, Kerala</p>
-        <a class="map-btn" target="_blank"
-           href="https://www.google.com/maps/search/?api=1&query=Hajimus+Convention+Centre+Taliparamba+Kannur+Kerala">
-          Get Directions
-        </a>
+      </div>
+
+      <div class="mini-note">
+        <span>23</span>
+        <p>December<br><strong>2026</strong></p>
       </div>
     </section>
 
-    <section class="invitation-image section">
-      <p class="eyebrow">The Invitation</p>
-      <h2>With our families</h2>
-      <img src="images/photo-1.jpeg" alt="Wedding invitation details">
-    </section>
+    <section class="section celebration-section reveal">
+      <div class="botanical botanical-left">❧</div>
+      <p class="eyebrow">come celebrate with us</p>
+      <h2>Eat. Dance.<br><em>Laugh a little louder.</em></h2>
 
-    <section class="final-photo">
-      <img src="images/photo-8.jpeg" alt="Devika and Sachin">
-      <div class="final-overlay">
-        <p class="eyebrow light">We can't wait to celebrate with you</p>
-        <h2>Devika <span>&</span> Sachin</h2>
-        <p>23 · 12 · 2026</p>
+      <div class="simple-illustration" aria-hidden="true">
+        <svg viewBox="0 0 360 150" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 130 C65 70 90 62 122 87 C151 110 182 113 213 83 C246 51 287 60 335 125" fill="none" stroke="#7f8b5d" stroke-width="3"/>
+          <g fill="#b65a65">
+            <circle cx="85" cy="72" r="7"/><circle cx="111" cy="86" r="6"/>
+            <circle cx="252" cy="74" r="7"/><circle cx="281" cy="87" r="6"/>
+          </g>
+          <g fill="#7f8b5d">
+            <ellipse cx="58" cy="92" rx="8" ry="18" transform="rotate(-40 58 92)"/>
+            <ellipse cx="302" cy="93" rx="8" ry="18" transform="rotate(40 302 93)"/>
+          </g>
+        </svg>
       </div>
+
+      <p class="closing-copy">Your presence is the sweetest gift.<br>We can't wait to celebrate with you.</p>
+
+      <p class="signature">With love,<br><span>Devika &amp; Sachin ♡</span></p>
+
+      <div class="final-date">23 · 12 · 2026</div>
     </section>
 
-    <footer>
-      <div class="ornament">❦</div>
-      <p>Made with love for our special day</p>
-    </footer>
+    <footer>made with love · D &amp; S</footer>
   </main>
 
   <script src="script.js"></script>
