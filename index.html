@@ -101,8 +101,8 @@
       </div>
 
       <div class="hero-actions">
-        <button id="saveDateButton">＋ Save the date</button>
-        <button id="shareButton">Share ↗</button>
+        <button class="saveDateButton">＋ Save the date</button>
+        <button class="shareButton">Share ↗</button>
       </div>
 
       <div class="couple-art">
@@ -141,30 +141,20 @@
       </div>
 
       <div class="calendar">
-        <div class="calendar-head">
-          <span>DECEMBER</span>
-          <b>2026</b>
-        </div>
-
-        <div class="calendar-grid">
-          <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
-          <i></i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i>
-          <i>7</i><i>8</i><i>9</i><i>10</i><i>11</i><i>12</i><i>13</i>
-          <i>14</i><i>15</i><i>16</i><i>17</i><i>18</i><i>19</i><i>20</i>
-          <i>21</i><i>22</i><b>23</b><i>24</i><i>25</i><i>26</i><i>27</i>
-          <i>28</i><i>29</i><i>30</i><i>31</i>
-        </div>
+        <div class="calendar-head"><span>DECEMBER</span><b>2026</b></div>
+        <div class="calendar-grid" id="calendarGrid"></div>
       </div>
 
       <div class="save-copy">
         <p class="micro">save this date</p>
-        <p>One beautiful day. One very special beginning.</p>
+        <p>One beautiful day. Tap the highlighted date to jump to the details.</p>
+        <a class="date-chip" href="#details"><b>23 Dec · Wedding</b><span>11:28 AM · Taliparamba, Kannur</span></a>
       </div>
     </section>
 
     <!-- WHEN & WHERE -->
-    <section class="page-section details-section reveal">
-      <p class="micro">two moments · one day</p>
+    <section class="page-section details-section reveal" id="details">
+      <p class="micro">one moment · one day</p>
       <h2 class="section-title">When &amp; where</h2>
 
       <div class="event-card">
@@ -174,59 +164,36 @@
         </div>
 
         <h3>Wedding Ceremony</h3>
+        <p class="event-time">Muhurtham · 11:28 AM – 12:05 PM</p>
 
-        <div class="event-row">
-          <span>muhurtham</span>
-          <b>11:28 AM – 12:05 PM</b>
-        </div>
+        <ul class="timeline">
+          <li><span></span>Guests arrive</li>
+          <li><span></span>Muhurtham <b>· 11:28 AM</b></li>
+          <li><span></span>Lunch to follow</li>
+        </ul>
 
-        <div class="event-row">
-          <span>venue</span>
-          <div>
-            <b>Hajimus Convention Centre</b>
-            <small>Taliparamba, Kannur, Kerala</small>
-          </div>
+        <div class="venue-box">
+          <p class="micro">venue</p>
+          <div class="venue-icon">🏛</div>
+          <b>Hajimus Convention Centre</b>
+          <small>Taliparamba, Kannur, Kerala</small>
+          <a href="https://www.google.com/maps/search/?api=1&query=Hajimus+Convention+Centre+Taliparamba" target="_blank" rel="noopener">Get directions →</a>
         </div>
       </div>
 
-      <div class="directions-note">♡ &nbsp; come as you are &nbsp; ♡</div>
-    </section>
-
-    <!-- CELEBRATION -->
-    <section class="page-section celebration-section reveal">
-      <p class="micro">one beautiful day</p>
-      <h2 class="section-title">Come celebrate<br><em>with us.</em></h2>
-
-      <div class="celebration-grid">
-        <div><span>♨</span><small>good food</small></div>
-        <div><span>♧</span><small>loved ones</small></div>
-        <div><span>✿</span><small>happiness<br>&amp; laughter</small></div>
-        <div><span>♡</span><small>new beginnings</small></div>
-      </div>
-
-      <p class="celebration-copy">
-        Dress up, show up, eat well,<br>
-        laugh loudly and celebrate love with us.
-      </p>
+      <div class="directions-note">♡ &nbsp; ✦ &nbsp; ♡</div>
     </section>
 
     <!-- CLOSING -->
-    <section class="closing-section reveal">
-      <div class="closing-art">
-        <div class="sun"></div>
-        <div class="water"></div>
-        <div class="palm palm-left">♣</div>
-        <div class="palm palm-right">♣</div>
-        <div class="boat">▰</div>
+    <section class="page-section closing-section reveal">
+      <div class="flourish">♡ ✦ ♡</div>
+      <p class="closing-names">Devika &amp; Sachin</p>
+      <p class="closing-message">Dress up, show up, celebrate with us.<br>We can't wait to see you.</p>
+      <div class="hero-actions">
+        <button class="saveDateButton">＋ Save the date</button>
+        <button class="shareButton">Share ↗</button>
       </div>
-
-      <div class="closing-content">
-        <p class="closing-message">We can't wait<br>to celebrate with you.</p>
-        <div class="flourish">♡ ✦ ♡</div>
-        <p class="with-love">with love,</p>
-        <p class="closing-names">Devika &amp; Sachin</p>
-        <p class="final-date">23 · 12 · 2026</p>
-      </div>
+      <p class="final-date">23 · 12 · 2026</p>
     </section>
 
     <footer>Devika &amp; Sachin · forever starts here</footer>
