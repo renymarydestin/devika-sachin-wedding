@@ -1,6 +1,5 @@
 /* =========================================================
-   DEVIKA & SACHIN — WEDDING INVITATION
-   Fresh JavaScript
+   DEVIKA & SACHIN — LUXURY INVITATION
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -9,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const openSeal = document.getElementById("openSeal");
   const openLabel = document.getElementById("openLabel");
   const invitation = document.getElementById("invitation");
-  const petalsContainer = document.getElementById("petals");
+  const petals = document.getElementById("petals");
 
   const musicButton = document.getElementById("musicButton");
   const musicText = document.getElementById("musicText");
@@ -17,80 +16,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let player = null;
   let musicReady = false;
-  let isPlaying = false;
+  let playing = false;
 
-  /* ===================== OPEN INVITATION ===================== */
+  /* ---------- opening ---------- */
 
   function openInvitation() {
     if (intro.classList.contains("opened")) return;
 
     envelope.classList.add("opened");
 
-    // Let the envelope animation begin before moving the cover away.
     setTimeout(() => {
       intro.classList.add("opened");
       invitation.setAttribute("aria-hidden", "false");
       createPetals();
-
-      // Try to start the selected song after the user's tap.
-      playMusic();
-    }, 550);
+      tryPlayMusic();
+    }, 650);
   }
 
   openSeal.addEventListener("click", openInvitation);
   openLabel.addEventListener("click", openInvitation);
 
-  /* ===================== FALLING PETALS ===================== */
+  /* ---------- petals ---------- */
 
   function createPetals() {
-    if (!petalsContainer || petalsContainer.dataset.started === "true") return;
+    if (petals.dataset.started === "true") return;
+    petals.dataset.started = "true";
 
-    petalsContainer.dataset.started = "true";
-
-    const count = window.innerWidth < 650 ? 22 : 38;
+    const count = window.innerWidth < 680 ? 22 : 38;
 
     for (let i = 0; i < count; i++) {
-      const petal = document.createElement("span");
-      petal.className = "petal";
-
-      petal.style.left = `${Math.random() * 100}%`;
-      petal.style.animationDuration = `${6 + Math.random() * 7}s`;
-      petal.style.animationDelay = `${Math.random() * 7}s`;
-      petal.style.transform = `rotate(${Math.random() * 180}deg)`;
-      petal.style.width = `${6 + Math.random() * 7}px`;
-      petal.style.height = `${10 + Math.random() * 9}px`;
-
-      petalsContainer.appendChild(petal);
+      const p = document.createElement("span");
+      p.className = "petal";
+      p.style.left = `${Math.random() * 100}%`;
+      p.style.animationDuration = `${6 + Math.random() * 7}s`;
+      p.style.animationDelay = `${Math.random() * 6}s`;
+      p.style.transform = `rotate(${Math.random() * 180}deg)`;
+      p.style.width = `${6 + Math.random() * 6}px`;
+      p.style.height = `${9 + Math.random() * 8}px`;
+      petals.appendChild(p);
     }
   }
 
-  /* ===================== YOUTUBE MUSIC ===================== */
+  /* ---------- YouTube music ---------- */
 
   function loadYouTubeAPI() {
     if (window.YT && window.YT.Player) {
-      initialiseYouTubePlayer();
+      initPlayer();
       return;
     }
 
-    const existing = document.querySelector(
-      'script[src="https://www.youtube.com/iframe_api"]'
-    );
-
-    if (!existing) {
+    if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
       document.head.appendChild(tag);
     }
 
-    const oldCallback = window.onYouTubeIframeAPIReady;
-
-    window.onYouTubeIframeAPIReady = () => {
-      if (typeof oldCallback === "function") oldCallback();
-      initialiseYouTubePlayer();
-    };
+    window.onYouTubeIframeAPIReady = initPlayer;
   }
 
-  function initialiseYouTubePlayer() {
+  function initPlayer() {
     if (player || !youtubeFrame) return;
 
     player = new YT.Player("youtubePlayer", {
@@ -100,64 +84,55 @@ document.addEventListener("DOMContentLoaded", () => {
           updateMusicButton();
         },
         onStateChange: (event) => {
-          if (event.data === YT.PlayerState.PLAYING) {
-            isPlaying = true;
-          }
-
+          if (event.data === YT.PlayerState.PLAYING) playing = true;
           if (
             event.data === YT.PlayerState.PAUSED ||
             event.data === YT.PlayerState.ENDED
-          ) {
-            isPlaying = false;
-          }
-
+          ) playing = false;
           updateMusicButton();
         }
       }
     });
   }
 
-  function playMusic() {
+  function tryPlayMusic() {
     if (!player || !musicReady) return;
 
     try {
       player.playVideo();
-      isPlaying = true;
+      playing = true;
       updateMusicButton();
-    } catch (error) {
-      console.log("Music could not start automatically.", error);
+    } catch (e) {
+      // Browser/YouTube autoplay rules can block this.
     }
   }
 
   function toggleMusic() {
     if (!player || !musicReady) return;
 
-    if (isPlaying) {
+    if (playing) {
       player.pauseVideo();
-      isPlaying = false;
+      playing = false;
     } else {
       player.playVideo();
-      isPlaying = true;
+      playing = true;
     }
 
     updateMusicButton();
   }
 
   function updateMusicButton() {
-    if (!musicButton || !musicText) return;
-
-    musicButton.classList.toggle("paused", !isPlaying);
-    musicText.textContent = isPlaying ? "pause music" : "play music";
+    musicText.textContent = playing ? "pause music" : "play music";
     musicButton.setAttribute(
       "aria-label",
-      isPlaying ? "Pause music" : "Play music"
+      playing ? "Pause music" : "Play music"
     );
   }
 
   musicButton.addEventListener("click", () => {
     if (!player) {
       loadYouTubeAPI();
-      setTimeout(toggleMusic, 800);
+      setTimeout(toggleMusic, 900);
       return;
     }
 
@@ -166,48 +141,68 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadYouTubeAPI();
 
-  /* ===================== COUNTDOWN ===================== */
+  /* ---------- countdown ---------- */
 
-  const targetDate = new Date("2026-12-23T11:28:00+05:30").getTime();
-
-  const daysEl = document.getElementById("days");
-  const hoursEl = document.getElementById("hours");
-  const minutesEl = document.getElementById("minutes");
-  const secondsEl = document.getElementById("seconds");
+  const target = new Date("2026-12-23T11:28:00+05:30").getTime();
 
   function updateCountdown() {
-    const now = Date.now();
-    const distance = targetDate - now;
+    const distance = target - Date.now();
 
-    if (distance <= 0) {
-      daysEl.textContent = "00";
-      hoursEl.textContent = "00";
-      minutesEl.textContent = "00";
-      secondsEl.textContent = "00";
-      return;
-    }
+    const days = Math.max(0, Math.floor(distance / 86400000));
+    const hours = Math.max(0, Math.floor((distance / 3600000) % 24));
+    const minutes = Math.max(0, Math.floor((distance / 60000) % 60));
+    const seconds = Math.max(0, Math.floor((distance / 1000) % 60));
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (distance / (1000 * 60 * 60)) % 24
-    );
-    const minutes = Math.floor(
-      (distance / (1000 * 60)) % 60
-    );
-    const seconds = Math.floor(
-      (distance / 1000) % 60
-    );
-
-    daysEl.textContent = String(days).padStart(2, "0");
-    hoursEl.textContent = String(hours).padStart(2, "0");
-    minutesEl.textContent = String(minutes).padStart(2, "0");
-    secondsEl.textContent = String(seconds).padStart(2, "0");
+    document.getElementById("days").textContent = String(days).padStart(2, "0");
+    document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+    document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+    document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
   }
 
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
-  /* ===================== SCROLL REVEALS ===================== */
+  /* ---------- save date ---------- */
+
+  document.getElementById("saveDateButton").addEventListener("click", () => {
+    const start = "20261223T112800";
+    const end = "20261223T120500";
+
+    const url =
+      "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      "&text=" + encodeURIComponent("Devika & Sachin — Wedding Ceremony") +
+      "&dates=" + start + "/" + end +
+      "&details=" + encodeURIComponent("Muhurtham: 11:28 AM – 12:05 PM") +
+      "&location=" + encodeURIComponent("Hajimus Convention Centre, Taliparamba, Kannur, Kerala");
+
+    window.open(url, "_blank", "noopener");
+  });
+
+  /* ---------- share ---------- */
+
+  document.getElementById("shareButton").addEventListener("click", async () => {
+    const shareData = {
+      title: "Devika & Sachin — Wedding Invitation",
+      text: "Join us for our wedding on 23 December 2026.",
+      url: window.location.href
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        const button = document.getElementById("shareButton");
+        const original = button.textContent;
+        button.textContent = "Link copied ✓";
+        setTimeout(() => button.textContent = original, 1600);
+      }
+    } catch (e) {
+      // User cancelled the native share dialog.
+    }
+  });
+
+  /* ---------- scroll reveals ---------- */
 
   const revealElements = document.querySelectorAll(".reveal");
 
@@ -219,9 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     },
-    {
-      threshold: 0.12
-    }
+    { threshold: 0.12 }
   );
 
   revealElements.forEach((element) => observer.observe(element));
